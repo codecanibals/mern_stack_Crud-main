@@ -16,7 +16,20 @@ export default function UserTable() {
         email: "",
         phone: ""
     })
-
+    const deletuser = (userid) => {
+        setUserId(userid)
+    }
+    const handleUserDelet = async () => {
+        try {
+            const DeletUser = await axios.delete(`http://localhost:8000/api/delete/${userId}`)
+            const response = DeletUser.data
+            if (response.success) {
+                toast.success(response.message)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const handlechange = (e) => {
         setValue({
@@ -26,6 +39,12 @@ export default function UserTable() {
 
     }
 
+
+    const UpadteUserData = (Updatedid) => {
+
+        setUpdatedUserId(Updatedid)
+
+    }
     const handleOnSubmit = async (e) => {
         e.preventDefault();
     
@@ -44,10 +63,11 @@ export default function UserTable() {
     }
     return (
         <>
-            <Table ></Table>
+            <Table Deletuser={deletuser} UpdatedUser={UpadteUserData}></Table>
 
             <AddUser></AddUser>
-       
+            <UpdatedUser handleOnSubmit={handleOnSubmit} value={value} handlechange={handlechange}></UpdatedUser>
+            <DeletUser handleUserDelet={handleUserDelet} ></DeletUser>
 
 
 
