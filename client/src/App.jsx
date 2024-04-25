@@ -12,7 +12,7 @@ export default function App() {
     <>
       <Toaster></Toaster>
       <UserTable />
-       {/* <Deleteusertable/> */}
+       <Deleteusertable/>
     </>
   );
 }

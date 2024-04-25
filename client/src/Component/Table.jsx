@@ -53,6 +53,7 @@ export default function Table({ Deletuser, UpdatedUser }) {
                         </thead>
                         <tbody>
                             {data.users?.map((elem, index) => {
+
                                 return (
                                     <tr>
                                         <td></td>

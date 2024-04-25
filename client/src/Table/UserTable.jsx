@@ -9,7 +9,6 @@ import toast from 'react-hot-toast'
 export default function UserTable() {
     const [userId, setUserId] = useState()
     const [updatedUserId, setUpdatedUserId] = useState()
-    console.log(updatedUserId)
     const [value, setValue] = useState({
         name: "",
         fathername: "",

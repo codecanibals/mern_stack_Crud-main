@@ -1,10 +1,11 @@
-import React from 'react'
-import { useState } from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
 const Deleteusertable = () => {
 
 
     const [deleteUserData, setDeleteUserData] = useState([])
+     
 
 
 
@@ -39,24 +40,25 @@ const Deleteusertable = () => {
                             <tr>
                                 <th></th>
                                 <th>Name</th>
-                                <th>Father</th>
+                                {/* <th>Father</th> */}
                                 <th>Email</th>
                                 <th>Phone</th>
-                                <th>Actions</th>
+                                {/* <th>Actions</th> */}
                             </tr>
                         </thead>
                         <tbody>
-                            {/* {data.users?.map((elem, index) => {
+                            {deleteUserData.usersdeleted?.map((elem, index) => {
+                          
                                 return (
+                                
                                     <tr>
                                         <td></td>
                                         <td>{elem.name}</td>
-                                        <td>{elem.fathername}</td>
                                         <td>{elem.email}</td>
                                         <td>{elem.phone}</td>
                                     </tr>
                                 )
-                            })} */}
+                            })}
 
                         </tbody>
                     </table>
