@@ -3,15 +3,16 @@ import 'bootstrap/dist/css/bootstrap.min.css'; // Corrected import path for Boot
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Corrected import path for Bootstrap JS
 import './App.css';
 import UserTable from './Table/UserTable';
-
+import axios from 'axios'
 import { Toaster } from 'react-hot-toast'
 import Deleteusertable from './Component/Deleteusertable';
 
 export default function App() {
+
   return (
     <>
       <Toaster></Toaster>
-      <UserTable />
+      <UserTable/>
        <Deleteusertable/>
     </>
   );

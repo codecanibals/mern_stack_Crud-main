@@ -34,6 +34,9 @@ export default function Table({ Deletuser, UpdatedUser }) {
                                 <h2>Manage <b>Employees</b></h2>
                             </div>
                             <div className="col-sm-6">
+                                <a href="http://localhost:8000/api/Getapidata" className="btn btn-success" >
+                                    <span>Get Api Data</span>
+                                </a>
                                 <a href="#" className="btn btn-success" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
                                     <i className="material-icons">&#xE147;</i> <span>Add New Employee</span>
                                 </a>
