@@ -5,12 +5,14 @@ import './App.css';
 import UserTable from './Table/UserTable';
 
 import { Toaster } from 'react-hot-toast'
+import Deleteusertable from './Component/Deleteusertable';
 
 export default function App() {
   return (
     <>
       <Toaster></Toaster>
       <UserTable />
+       {/* <Deleteusertable/> */}
     </>
   );
 }

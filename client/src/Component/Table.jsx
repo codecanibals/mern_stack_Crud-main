@@ -9,6 +9,7 @@ export default function Table({ Deletuser, UpdatedUser }) {
     useEffect(() => {
         async function FeatchData() {
             try {
+                // const userdataa = await axios.get('http://localhost:8000/api/getApiData')
                 const user = await axios.get('http://localhost:8000/api/get')
                 const response = user.data
                 // console.log(response.users)

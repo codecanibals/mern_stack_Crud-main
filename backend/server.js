@@ -3,7 +3,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import routers from './routes/routes.js'
 import dbCon from "./utlis/db.js";
-
+import axios from 'axios'
 
 
 dotenv.config()
