@@ -12,7 +12,7 @@ const Deleteusertable = () => {
     useEffect(() => {
         async function FeatchDataa() {
             try {
-                const userremoved = await axios.get('http://localhost:8000/api/getdeleteuser')
+                const userremoved = await axios.get('http://localhost:8080/api/getDeleteUser')
                 const response = userremoved.data
                 setDeleteUserData(response)
             } catch (error) {
@@ -21,7 +21,7 @@ const Deleteusertable = () => {
         }
         FeatchDataa()
 
-    }, [deleteUserData])
+    }, [])
 
   return (
     <>

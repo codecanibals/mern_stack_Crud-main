@@ -5,6 +5,7 @@ import UpdatedUser from '../Component/UpdatedUser'
 import DeletUser from '../Component/DeletUser'
 import axios from 'axios'
 import toast from 'react-hot-toast'
+import Deleteusertable from '../Component/Deleteusertable'
 
 export default function UserTable() {
     const [userId, setUserId] = useState()
@@ -20,7 +21,7 @@ export default function UserTable() {
     }
     const handleUserDelet = async () => {
         try {
-            const DeletUser = await axios.delete(`http://localhost:8000/api/delete/${userId}`)
+            const DeletUser = await axios.delete(`http://localhost:8080/api/deleteUser/${userId}`)
             const response = DeletUser.data
             if (response.success) {
                 toast.success(response.message)
@@ -48,9 +49,9 @@ export default function UserTable() {
         e.preventDefault();
     
         try {
-            const UpdatedUser = await axios.put(`http://localhost:8000/api/update/${updatedUserId}`,value)
+            const UpdatedUser = await axios.put(`http://localhost:8080/api/updateUser/${updatedUserId}`,value)
             const response = UpdatedUser.data
-
+            //  console.log(response)
             if (response.success) {
                 toast.success(response.message)
             }
@@ -67,7 +68,7 @@ export default function UserTable() {
             <AddUser></AddUser>
             <UpdatedUser handleOnSubmit={handleOnSubmit} value={value} handlechange={handlechange}></UpdatedUser>
             <DeletUser handleUserDelet={handleUserDelet} ></DeletUser>
-
+            <Deleteusertable></Deleteusertable>
 
 
 

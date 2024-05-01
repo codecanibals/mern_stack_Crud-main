@@ -2,30 +2,32 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 export default function Table({ Deletuser, UpdatedUser }) {
+    /*
+    const [data, setData] = useState([])
+    useEffect(() => {
+        async function FeatchData() {
+            try {
+                // const userdataa = await axios.get('http://localhost:8000/api/getApiData')
+                const user = await axios.get('http://localhost:8080/api/get')
+                const response = user.data
+                // console.log(response.users)
+                setData(response)
+                // console.log(response.data.users.email, 'email')
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        FeatchData()
 
-
-    // const [data, setData] = useState([])
-    // useEffect(() => {
-    //     async function FeatchData() {
-    //         try {
-    //             const user = await axios.get('http://localhost:8000/api/get')
-    //             const response = user.data
-    //             // console.log(response.users)
-    //             setData(response)
-    //             // console.log(response.data.users.email, 'email')
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-    //     }
-    //     FeatchData()
-    // }, [data])
-    
+    }, [data])
+    */
    
 const [data, setData] = useState("");
 
 const fetchData = async () => {
   try {
     const user = await axios.get("http://localhost:8080/api/getUsers");
+
     const response = user.data;
     setData(response);
   } catch (error) {
@@ -47,9 +49,9 @@ useEffect(() => {
                                 <h2>Manage <b>Employees</b></h2>
                             </div>
                             <div className="col-sm-6">
-                                {/* <a href="http://localhost:5173/api/getUsers" className="btn btn-success" >
+                                <a href="http://localhost:8080/api/Getapidata" className="btn btn-success" >
                                     <span>Get Api Data</span>
-                                </a> */}
+                                </a>
                                 <a href="#" className="btn btn-success" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
                                     <i className="material-icons">&#xE147;</i> <span>Add New Employee</span>
                                 </a>

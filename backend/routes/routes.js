@@ -1,16 +1,17 @@
 import express from 'express'
 import axios from 'axios'
-import { create,get,Updated,Delete,Getapidata ,getdeleteuser} from '../controllers/usercontrollers.js'
-// import { getApiData} from '../controllers/apidatacontroller.js'
+import { createUser,getUserData,updateUser,deleteUser,getDeleteUser,getUsers,getMockUsers,getApiData} from '../controllers/usercontrollers.js'
 
 const routers=express.Router()
 
-routers.post('/create',create)
-routers.get('/get',get)
-routers.get('/getdeleteuser',getdeleteuser)
-routers.put('/update/:id',Updated)
-routers.delete('/delete/:id',Delete)
-routers.get('/Getapidata',Getapidata)
+routers.post('/createUser',createUser)
+routers.get('/getUser',getUserData)
+routers.get('/getDeleteUser',getDeleteUser)
+routers.put('/updateUser/:id',updateUser)
+routers.delete('/deleteUser/:id',deleteUser)
+routers.get('/getApiData',getApiData)
+routers.get('/getUsers',getUsers)
+routers.get('/getMockUsers',getMockUsers)
 
 
 export default routers

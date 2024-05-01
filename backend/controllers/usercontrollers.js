@@ -1,8 +1,10 @@
 import usermodel from "../models/User.js"
 import deleteusermodel from "../models/Deleteuser.js"
 import axios from 'axios'
+import https from 'https'
 
- const create=async(req,res)=>{
+
+ const createUser=async(req,res)=>{
   try {
     const {name,email,fathername,phone}=req.body
     const Newuser=  new usermodel({
@@ -18,7 +20,7 @@ import axios from 'axios'
 }
 
 ///////Read api
-const get=async(req,res)=>{
+const getUserData=async(req,res)=>{
        
    try {
     const users= await usermodel.find()
@@ -35,7 +37,7 @@ const get=async(req,res)=>{
 
 }
 
-const getdeleteuser=async(req,res)=>{
+const getDeleteUser=async(req,res)=>{
        
    try {
     const usersdeleted= await deleteusermodel.find()
@@ -55,10 +57,10 @@ const getdeleteuser=async(req,res)=>{
 }
 
 ////////update user api
-const Updated=async(req,res)=>{
+const updateUser=async(req,res)=>{
  try {
      const userId=req.params.id
- 
+     console.log(userId)
  const updateuser=await usermodel.findByIdAndUpdate(userId,req.body,{new:true})
    if (!updateuser) {
       return res.status(404).json({ success: false, message: 'User not found' });
@@ -70,8 +72,8 @@ const Updated=async(req,res)=>{
  }
 }
 
-// delet user ap
-const Delete=async(req,res)=>{
+// delet user api
+const deleteUser=async(req,res)=>{
 try {
    const userId=req.params.id
    const deletuser= await usermodel.findByIdAndDelete(userId)
@@ -93,7 +95,8 @@ try {
 }
 }
 
-const Getapidata=async(req,res)=>{
+
+const getApiData=async(req,res)=>{
   try {
       const myPosts = await fetch("https://jsonplaceholder.typicode.com/users")
       const response = await myPosts.json();
@@ -113,4 +116,55 @@ const Getapidata=async(req,res)=>{
   }
 }
 
-export {create,get,Updated,Delete,Getapidata,getdeleteuser}
+
+const url = "https://jsonplaceholder.typicode.com/users";
+const httpsAgent = new https.Agent({
+  rejectUnauthorized: false,
+});
+
+const getUsers = async (req, res) => {
+  try {
+    const usr = await axios.get(url, { httpsAgent });
+    let users = usr.data
+
+   /* for(let i = 0 ;i<users.length;i++){
+      const Apiuserdata =  new usermodel({
+        name:users[i]['name'],
+        email:users[i]['email'],
+        phone:users[i]['phone'],
+        
+       })
+       await Apiuserdata.save()
+    }
+    */
+    const dbUsers= await usermodel.find()
+    console.log(dbUsers)
+    // Note - users compare with db users data
+
+
+    if (!users) {
+      return res.status(404).json({ success: false })
+    }
+    res.status(200).json({ users })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ success: false })
+  }
+}
+
+const getMockUsers = async (req, res) => {
+  try {
+    let users = [{ "name": "1", "fathername": "xyz", "email": "mno", "phone": "xyz@mno.com" }]
+    if (!users) {
+      return res.status(404).json({ success: false })
+    }
+
+    res.status(200).json({ users })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ success: false })
+  }
+}
+
+
+export {createUser,getUserData,updateUser,deleteUser,getDeleteUser,getUsers,getMockUsers,getApiData}
