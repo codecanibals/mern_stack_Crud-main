@@ -12,7 +12,7 @@ export default function UserTable() {
     const [updatedUserId, setUpdatedUserId] = useState()
     const [value, setValue] = useState({
         name: "",
-        fathername: "",
+        username: "",
         email: "",
         phone: ""
     })
@@ -40,9 +40,11 @@ export default function UserTable() {
     }
 
 
-    const UpadteUserData = (Updatedid) => {
+    const UpadteUserData = (Updatedid,elem) => {
 
         setUpdatedUserId(Updatedid)
+        console.log(elem)
+        setValue(elem)
 
     }
     const handleOnSubmit = async (e) => {

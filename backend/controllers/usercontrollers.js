@@ -6,9 +6,9 @@ import https from 'https'
 
  const createUser=async(req,res)=>{
   try {
-    const {name,email,fathername,phone}=req.body
+    const {name,username,email,phone}=req.body
     const Newuser=  new usermodel({
-    name,fathername,email,phone
+    name,username,email,phone
    })
    await Newuser.save()
 
@@ -138,14 +138,51 @@ const getUsers = async (req, res) => {
     }
     */
     const dbUsers= await usermodel.find()
-    console.log(dbUsers)
+  
+    let valueFind = false;
+    let mainUserData = [];
+    let status = "";
     // Note - users compare with db users data
+    for(let i = 0 ;i<users.length;i++){
+      for(let j = 0 ;j<dbUsers.length;j++)
+      {
+       
+        if(dbUsers[j].id === users[i].id){
+          valueFind = true
+        }
+      }
+      if (!valueFind){
+        // let mainUserObject = {
+        //   id:users[i]['id'],
+        //   name:users[i]['name'],
+        //   username:users[i]['username'],
+        //   email:users[i]['email'],
+        //   phone:users[i]['phone'],
+        //   website:users[i]['website'],
+        //   status:"",
 
+        // }
 
-    if (!users) {
+        const apiUserData =  new usermodel({
+          id:users[i]['id'],
+          name:users[i]['name'],
+          username:users[i]['username'],
+          email:users[i]['email'],
+          phone:users[i]['phone'],
+          website:users[i]['website'],
+          status:"",
+         })
+         await apiUserData.save()   
+       }
+      valueFind = false
+    }
+   mainUserData = await usermodel.find()
+   console.log(mainUserData)
+  
+    if (!mainUserData) {
       return res.status(404).json({ success: false })
     }
-    res.status(200).json({ users })
+    res.status(200).json({ mainUserData })
   } catch (error) {
     console.log(error)
     res.status(500).json({ success: false })

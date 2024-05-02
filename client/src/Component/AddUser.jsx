@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 export default function AddUser() {
     const [value, setValue] = useState({
         name: '',
-        fathername: '',
+        username: '',
         email: '',
         phone: ""
     })

@@ -22,8 +22,8 @@ export default function UpdatedUser({ handleOnSubmit, value, handlechange }) {
                                     <input type="text" value={value.name} name='name' onChange={handlechange} className="form-control" />
                                 </div>
                                 <div className="form-group">
-                                    <label>Father</label>
-                                    <input type="text" value={value.fathername} name='fathername' onChange={handlechange} className="form-control" />
+                                    <label>Username</label>
+                                    <input type="text" value={value.username} name='username' onChange={handlechange} className="form-control" />
                                 </div>
                                 <div className="form-group">
                                     <label>Email</label>
