@@ -97,6 +97,7 @@ export default function Table({ Deletuser, UpdatedUser }) {
                 <th>Username</th>
                 <th>Email</th>
                 <th>Phone</th>
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -109,8 +110,11 @@ export default function Table({ Deletuser, UpdatedUser }) {
                     <td>{elem.username}</td>
                     <td>{elem.email}</td>
                     <td>{elem.phone}</td>
+                    <td>  {elem.status?(<i className='fa fa-check'></i>):(   <i class="fa-solid fa-xmark"></i>)}</td>
+                  
                     {elem.status ? (
                       <td>
+                        <div>
                         <a
                           href="#"
                           className="edit cursor-pointer"
@@ -141,12 +145,17 @@ export default function Table({ Deletuser, UpdatedUser }) {
                             &#xE872;
                           </i>
                         </a>
+                        
+                        </div>
                         {/* <a className="delete" data-bas-toggle='modal' data-bs-target='#deleteEmployeeModal'><i className="material-icons" data-bs-toggle="tooltip" title="Delete">&#xE872;</i></a> */}
                       </td>
                     ) : (
+                        <div>
                       <button onClick={() => updateUser(elem.id,elem._id)}>
                         <i className="fa-solid fa-plus"></i>
                       </button>
+                   
+                      </div>
                     )}
                   </tr>
                 );
