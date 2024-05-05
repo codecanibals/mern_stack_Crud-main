@@ -1,22 +1,49 @@
 import mongoose from "mongoose";
 
 const deleteUserSchema= new mongoose.Schema({
+    // name:{
+    //     type:String,
+    //     required:true
+    // },
+    //     fathername:{
+    //     type:String,
+       
+    // }, 
+    //    email:{
+    //     type:String,
+    //     required:true
+    // },
+    //      phone:{
+    //     type:String,
+    //     required:true
+    // }
+
+    id:{
+        type:Number,
+        default:0,
+    },
     name:{
         type:String,
         required:true
     },
-        fathername:{
+    username:{
         type:String,
        
     }, 
-       email:{
+    email:{
         type:String,
         required:true
     },
-         phone:{
+    phone:{
         type:String,
         required:true
-    }
+    },
+    website:{
+        type:String,
+    },
+    status:{
+        type:String
+    },
 },{timestamps:true})
 
 

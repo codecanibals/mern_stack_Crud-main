@@ -19,15 +19,17 @@ export default function Table({ Deletuser, UpdatedUser }) {
   // }, [data])
 
   const [data, setData] = useState([]);
+  
+   console.log( "this is the backend data",data);
 
   const fetchData = async () => {
     try {
       const user = await axios.get("http://localhost:8080/api/getUsers");
       const response = await user.data;
-      //console.log(response);
+      console.log(response);
       // dataa = response
       //console.log(data)
-      setData(response);
+      setData(response.finalUsers);
       console.log(response)
     } catch (error) {
       console.log(error);
@@ -40,26 +42,34 @@ export default function Table({ Deletuser, UpdatedUser }) {
 
 
   const updateUser = async (userId,dbUserId) => {
+    console.log("Hello")
     let newUser = {}
     for(let i = 0 ;i<data.length;i++){
-        if(data.mainUserData.id === userId){
+        if(data[i].id === userId){
             newUser = data[i]
         }
     }
-    // let newUser = data.mainUserData[userId-1]
-    newUser.status = true;
-    console.log(newUser)
+    
+    newUser = data[userId-1]
+    // newUser.status = "Available";
+    // console.log(newUser)
 
     try {
-        const UpdatedUser = await axios.put(`http://localhost:8080/api/updateUser/${dbUserId}`,newUser)
-        const response = UpdatedUser.data
-        // if (response.success) {
-        //     toast.success(response.message)
-        // }
-    } catch (error) {
-        console.log(error)
-    }
-    // console.log(value)
+      const adduser = await axios.post('http://localhost:8080/api/createUser', newUser)
+      console.log("main data here")
+      console.log(data)
+      const response = adduser.data
+      setData(data)
+      if (response.success) {
+          toast.success(response.Message)
+          CloseRef.current.click()
+      }
+
+      console.log(response)
+  } catch (error) {
+      console.log(error)
+  }
+  
   };
 
   return (
@@ -97,12 +107,12 @@ export default function Table({ Deletuser, UpdatedUser }) {
                 <th>Username</th>
                 <th>Email</th>
                 <th>Phone</th>
-                <th>Status</th>
+                {/* <th>Status</th> */}
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {data.mainUserData?.map((elem, index) => {
+              {data?.map((elem, index) => {
                 return (
                   <tr>
                     <td></td>
@@ -110,7 +120,7 @@ export default function Table({ Deletuser, UpdatedUser }) {
                     <td>{elem.username}</td>
                     <td>{elem.email}</td>
                     <td>{elem.phone}</td>
-                    <td>  {elem.status?(<i className='fa fa-check'></i>):(   <i class="fa-solid fa-xmark"></i>)}</td>
+                    {/* <td>  {elem.status?(<i className='fa fa-check'></i>):(   <i className="fa-solid fa-xmark"></i>)}</td> */}
                   
                     {elem.status ? (
                       <td>
