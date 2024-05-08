@@ -8,6 +8,11 @@ import toast from 'react-hot-toast'
 import Deleteusertable from '../Component/Deleteusertable'
 
 export default function UserTable() {
+
+
+    const [isUpdateLoading,setIsUpdateLoading] = useState(false)
+    const [isDeleteLoading,setIsDeleteLoading] = useState(false)
+
     const [userId, setUserId] = useState()
     const [updatedUserId, setUpdatedUserId] = useState()
     const [value, setValue] = useState({
@@ -19,16 +24,10 @@ export default function UserTable() {
     const deletuser = (userid) => {
         setUserId(userid)
     }
-    const handleUserDelet = async () => {
-        try {
-            const DeletUser = await axios.delete(`http://localhost:8080/api/deleteUser/${userId}`)
-            const response = DeletUser.data
-            if (response.success) {
-                toast.success(response.message)
-            }
-        } catch (error) {
-            console.log(error)
-        }
+    const handleUserDelete = () => {
+        setIsDeleteLoading(true)
+        console.log("delete is loading")
+        setIsDeleteLoading(false)
     }
 
     const handlechange = (e) => {
@@ -45,11 +44,13 @@ export default function UserTable() {
         setUpdatedUserId(Updatedid)
         console.log(elem)
         setValue(elem)
+        
+       
 
     }
     const handleOnSubmit = async (e) => {
         e.preventDefault();
-    
+        setIsUpdateLoading(true)
         try {
             const UpdatedUser = await axios.put(`http://localhost:8080/api/updateUser/${updatedUserId}`,value)
             const response = UpdatedUser.data
@@ -62,18 +63,16 @@ export default function UserTable() {
             console.log(error)
         }
         // console.log(value)
+        setIsUpdateLoading(false)
     }
     return (
         <>
-            <Table Deletuser={deletuser} UpdatedUser={UpadteUserData}></Table>
+            <Table Deletuser={deletuser} UpdatedUser={UpadteUserData} isUpdateLoading = {isUpdateLoading}></Table>
             
             <AddUser></AddUser>
             <UpdatedUser handleOnSubmit={handleOnSubmit} value={value} handlechange={handlechange}></UpdatedUser>
-            <DeletUser handleUserDelet={handleUserDelet} ></DeletUser>
-            <Deleteusertable></Deleteusertable>
-
-
-
+            {/* <DeletUser handleUserDelet={handleUserDelet} ></DeletUser> */}
+            <Deleteusertable isDeleteLoading = {isDeleteLoading} ></Deleteusertable>
         </>
     )
 }

@@ -1,13 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
-const Deleteusertable = () => {
+const Deleteusertable = ({isDeleteLoading}) => {
 
 
     const [deleteUserData, setDeleteUserData] = useState([])
-     
-
-
+  
 
     useEffect(() => {
         async function FeatchDataa() {
@@ -15,13 +13,15 @@ const Deleteusertable = () => {
                 const userremoved = await axios.get('http://localhost:8080/api/getDeleteUser')
                 const response = userremoved.data
                 setDeleteUserData(response)
+                console.log("this is deleted data")
+                console.log(response)
             } catch (error) {
                 console.log(error)
             }
         }
         FeatchDataa()
 
-    }, [])
+    }, [isDeleteLoading])
 
   return (
     <>

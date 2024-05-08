@@ -85,14 +85,6 @@ try {
        email:deletuser['email'],
        phone:deletuser['phone'],
        id:deletuser['id'],
-      // id:deletuser[i]['id'],
-      // name:deletuser[i]['name'],
-      // username:deletuser[i]['username'],
-      // email:deletuser[i]['email'],
-      // phone:deletuser[i]['phone'],
-      // website:deletuser[i]['website'],
-      // status:"",
-
    })
    await Deleteuser.save()
 
@@ -105,36 +97,6 @@ try {
     res.status(500).json({ success: false, message: 'Internal server error' });
 }
 }
-
-
-const getApiData=async(req,res)=>{
-  try {
-      const myPosts = await fetch("https://jsonplaceholder.typicode.com/users")
-      const response = await myPosts.json();
-      for(let i = 0 ;i<response.length;i++){
-        const Apiuserdata =  new usermodel({
-          // name:response[i]['name'],
-          // email:response[i]['email'],
-          // phone:response[i]['phone'],
-
-          id:response[i]['id'],
-          name:response[i]['name'],
-          username:response[i]['username'],
-          email:response[i]['email'],
-          phone:response[i]['phone'],
-          website:response[i]['website'],
-          status:"",
-          
-         })
-         await Apiuserdata.save()
-      }
-
-  } catch (error) {
-      console.log(error) 
-      
-  }
-}
-
 
 const url = "https://jsonplaceholder.typicode.com/users";
 const httpsAgent = new https.Agent({
@@ -168,21 +130,10 @@ const getUsers = async (req, res) => {
     let dbUsers= await usermodel.find()
     let dbDeletedUsers= await deleteusermodel.find()
 
-    // let dbUsers = [];
-    // let dbUsr = {
-    //   id: 5,
-    //   name: "Mrs. Dennis Schulist",
-    //   username: "Leopoldo_Corkery",
-    //   email: "Karley_Dach@jasper.info",
-    //   phone: "1-477-935-8478 x6430",
-    //   website: "ola.org",
-    // };
-    // dbUsers.push(dbUsr);
 
     let finalUsers = [];
     let userFound = false;
-    // console.log("users:" + JSON.stringify(users));
-    // console.log("dbUsers:" + JSON.stringify(dbUsers));
+
     if (users.length > 0 && dbUsers.length > 0) {
       console.log("users and dbUsers having data ...");
 
@@ -194,15 +145,19 @@ const getUsers = async (req, res) => {
             dbUsr.status = "Available";
             finalUsers.push(dbUsr);
             userFound = true
-          } /*
-          else {
-            usr.status = "";
-            finalUsers.push(usr);
-          }*/
+          } 
+        
         }
         if(!userFound){
-      
-          finalUsers.push(users[i])
+          let temp = {}
+          temp.id = users[i].id;
+          temp.name = users[i].name;
+          temp.username = users[i].username;
+          temp.email = users[i].email;
+          temp.phone = users[i].phone;
+         
+          finalUsers.push(temp)
+          temp = {}
         }
         userFound = false
       }
@@ -210,35 +165,34 @@ const getUsers = async (req, res) => {
       console.log("else block");
       for (var i = 0; i < users.length; i++) {
         let usr = users[i];
-        //console.log("i value :"+i+ " usr details:"+usr);
         usr.status = "";
-        //console.log("i value :"+i+ " usr details updated:"+JSON.stringify(usr));
+
         finalUsers.push(usr);
       }
     }
 
     if(dbDeletedUsers.length>0){
-      console.log("inside db deleted users")
-    for(let k = 0 ;k<finalUsers.length;k++){
-      for(let j = 0 ;j<dbDeletedUsers.length;j++){
-           if (finalUsers[k].id === dbDeletedUsers[j].id){
+  
+      for(let m = 0 ;m<dbDeletedUsers.length;m++){
+    for(let k = 0 , len = finalUsers.length ;k<len;k++){
+           if (finalUsers[k].id === dbDeletedUsers[m].id){
+            console.log("I am from final users : " + finalUsers[k].id)
+            console.log("I am from dbdeleted users : " + dbDeletedUsers[m].id )
             console.log("users is deleteing for main data")
-             finalUsers.splice(k,1);
+            finalUsers.splice(k,1)
+            len = finalUsers.length
            }
       }
     }
   }
-    //console.log("finalUsers:"+finalUsers)
-    // console.log(" users : " +  users);
-    console.log("finalUsers")
+
     console.log(finalUsers)
-    // console.log("finalUsers:"+JSON.stringify(finalUsers));
     res.status(200).json({ finalUsers});
-  } catch (error) {
+ } catch (error) {
     console.log(error);
     res.status(500).json({ success: false });
   }
 };
 
 
-export {createUser,getUserData,updateUser,deleteUser,getDeleteUser,getUsers,getMockUsers,getApiData}
+export {createUser,getUserData,updateUser,deleteUser,getDeleteUser,getUsers,getMockUsers}

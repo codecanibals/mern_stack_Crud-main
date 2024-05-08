@@ -1,65 +1,46 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
-export default function Table({ Deletuser, UpdatedUser }) {
-  // const [data, setData] = useState([])
-  // useEffect(() => {
-  //     async function FeatchData() {
-  //         try {
-  //             const user = await axios.get('http://localhost:8000/api/get')
-  //             const response = user.data
-  //             // console.log(response.users)
-  //             setData(response)
-  //             // console.log(response.data.users.email, 'email')
-  //         } catch (error) {
-  //             console.log(error)
-  //         }
-  //     }
-  //     FeatchData()
-  // }, [data])
+export default function Table({ UpdatedUser,isUpdateLoading}) {
 
   const [data, setData] = useState([]);
+  const [isLoading,setIsLoading] = useState(false)
   
-   console.log( "this is the backend data",data);
-
+  
+ 
   const fetchData = async () => {
     try {
       const user = await axios.get("http://localhost:8080/api/getUsers");
       const response = await user.data;
-      console.log(response);
-      // dataa = response
-      //console.log(data)
+  
       setData(response.finalUsers);
-      console.log(response)
+      console.log("this is users data")
+      console.log(response.finalUsers)
+      
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
     fetchData();
-  }, []);
+  },[isLoading,isUpdateLoading]);
 
 
-
-  const updateUser = async (userId,dbUserId) => {
-    console.log("Hello")
+  
+  const createUser = async (userId) => {
+    setIsLoading(true)
     let newUser = {}
     for(let i = 0 ;i<data.length;i++){
         if(data[i].id === userId){
             newUser = data[i]
         }
     }
-    
-    newUser = data[userId-1]
-    // newUser.status = "Available";
-    // console.log(newUser)
-
     try {
       const adduser = await axios.post('http://localhost:8080/api/createUser', newUser)
       console.log("main data here")
       console.log(data)
       const response = adduser.data
-      setData(data)
       if (response.success) {
           toast.success(response.Message)
           CloseRef.current.click()
@@ -69,8 +50,27 @@ export default function Table({ Deletuser, UpdatedUser }) {
   } catch (error) {
       console.log(error)
   }
-  
+  setIsLoading(false)
   };
+
+  const deleteUser = async (userId) => {
+    setIsLoading(true)
+     console.log(userId);
+    try {
+      const DeletUser = await axios.delete(`http://localhost:8080/api/deleteUser/${userId}`)
+      const response = DeletUser.data
+            if (response.success) {
+                toast.success(response.message)
+            }
+
+      console.log(response)
+  } catch (error) {
+      console.log(error)
+  }
+  setIsLoading(false)
+  };
+
+
 
   return (
     <>
@@ -107,7 +107,6 @@ export default function Table({ Deletuser, UpdatedUser }) {
                 <th>Username</th>
                 <th>Email</th>
                 <th>Phone</th>
-                {/* <th>Status</th> */}
                 <th>Actions</th>
               </tr>
             </thead>
@@ -119,9 +118,7 @@ export default function Table({ Deletuser, UpdatedUser }) {
                     <td>{elem.name}</td>
                     <td>{elem.username}</td>
                     <td>{elem.email}</td>
-                    <td>{elem.phone}</td>
-                    {/* <td>  {elem.status?(<i className='fa fa-check'></i>):(   <i className="fa-solid fa-xmark"></i>)}</td> */}
-                  
+                    <td>{elem.phone}</td>  
                     {elem.status ? (
                       <td>
                         <div>
@@ -143,9 +140,10 @@ export default function Table({ Deletuser, UpdatedUser }) {
                         <a
                           href="#"
                           className="delete cursor-pointer"
-                          data-bs-toggle="modal"
-                          data-bs-target="#deleteEmployeeModal"
-                          onClick={() => Deletuser(elem._id)}
+                          // data-bs-toggle="modal"
+                          // data-bs-target="#deleteEmployeeModal"
+                          onClick={() => deleteUser(elem._id)}
+                          // onClick={() => Deletuser(elem._id)}
                         >
                           <i
                             className="material-icons"
@@ -161,7 +159,7 @@ export default function Table({ Deletuser, UpdatedUser }) {
                       </td>
                     ) : (
                         <div>
-                      <button onClick={() => updateUser(elem.id,elem._id)}>
+                      <button onClick={() => createUser(elem.id,elem._id)}>
                         <i className="fa-solid fa-plus"></i>
                       </button>
                    
