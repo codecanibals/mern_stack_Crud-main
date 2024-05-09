@@ -1,5 +1,6 @@
 import usermodel from "../models/User.js"
 import deleteusermodel from "../models/Deleteuser.js"
+import postmodel from "../models/PostModel.js"
 import axios from 'axios'
 import https from 'https'
 
@@ -194,5 +195,46 @@ const getUsers = async (req, res) => {
   }
 };
 
+const createPost=async(req,res)=>{
 
-export {createUser,getUserData,updateUser,deleteUser,getDeleteUser,getUsers,getMockUsers}
+  let dbPosts = await postmodel.find()
+
+  try {
+    const {id,userid,title,body}=req.body
+    const newPost=  new PostModel({
+      id,userId,title,body
+   })
+
+  await newPost.save()
+ 
+   res.status(200).json({success:true,message:"User Created Successfully.", newPost})
+  } catch (error) {
+    console.log(error)
+  return  res.status(500).json({success:false,message:"Interl server eror"})
+  }
+}
+
+const postUrl = "https://jsonplaceholder.typicode.com/posts";
+
+const getPosts = async (req, res) => {
+
+  try {
+    const posts = await axios.get(postUrl, { httpsAgent });
+    let postsData = posts.data;
+
+    if (!postsData) {
+      return res.status(404).json({ success: false });
+    }  
+    console.log(postsData)
+    res.status(200).json({ postsData });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false });
+  }
+}
+
+
+
+
+
+export {createUser,getUserData,updateUser,deleteUser,getDeleteUser,getUsers,getMockUsers,getPosts}

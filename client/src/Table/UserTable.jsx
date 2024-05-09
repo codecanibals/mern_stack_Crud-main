@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import Table from '../Component/Table'
 import AddUser from '../Component/AddUser'
 import UpdatedUser from '../Component/UpdatedUser'
-import DeletUser from '../Component/DeletUser'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import Deleteusertable from '../Component/Deleteusertable'
@@ -72,7 +71,7 @@ export default function UserTable() {
             <AddUser></AddUser>
             <UpdatedUser handleOnSubmit={handleOnSubmit} value={value} handlechange={handlechange}></UpdatedUser>
             {/* <DeletUser handleUserDelet={handleUserDelet} ></DeletUser> */}
-            <Deleteusertable isDeleteLoading = {isDeleteLoading} ></Deleteusertable>
+            {/* <Deleteusertable isDeleteLoading = {isDeleteLoading} ></Deleteusertable> */}
         </>
     )
 }
