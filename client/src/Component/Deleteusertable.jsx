@@ -31,7 +31,7 @@ const Deleteusertable = ({isDeleteLoading}) => {
                     <div className="table-title">
                         <div className="row">
                             <div className="col-sm-6">
-                                <h2>Delete <b>Employees History</b></h2>
+                                <h2>Deleted <b>Users History</b></h2>
                             </div>
                         </div>
                     </div>
@@ -40,10 +40,9 @@ const Deleteusertable = ({isDeleteLoading}) => {
                             <tr>
                                 <th></th>
                                 <th>Name</th>
-                                {/* <th>Father</th> */}
+                                <th>Username</th>
                                 <th>Email</th>
                                 <th>Phone</th>
-                                {/* <th>Actions</th> */}
                             </tr>
                         </thead>
                         <tbody>
@@ -54,6 +53,7 @@ const Deleteusertable = ({isDeleteLoading}) => {
                                     <tr>
                                         <td></td>
                                         <td>{elem.name}</td>
+                                        <td>{elem.username}</td>
                                         <td>{elem.email}</td>
                                         <td>{elem.phone}</td>
                                     </tr>

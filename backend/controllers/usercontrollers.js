@@ -86,6 +86,7 @@ try {
        email:deletuser['email'],
        phone:deletuser['phone'],
        id:deletuser['id'],
+       username:deletuser['username']
    })
    await Deleteuser.save()
 
@@ -196,18 +197,40 @@ const getUsers = async (req, res) => {
 };
 
 const createPost=async(req,res)=>{
-
+  console.log("inside create post")
+  console.log(req.body)
   let dbPosts = await postmodel.find()
-
+  let usersData = await usermodel.find()
+  const {id,userId,title,body}=req.body
+  let userIsPresent = false;
   try {
-    const {id,userid,title,body}=req.body
-    const newPost=  new PostModel({
+  if(usersData){
+    for(let i = 0 ; i<usersData.length;i++ ){
+      if(userId === usersData[i].id){
+        userIsPresent = true
+      }
+    }
+  }
+
+  if(!userIsPresent){
+    return res.status(404).json({ success: false, message: 'user Not found' });
+  }else{
+  if(dbPosts){
+    for(let i = 0 ; i<dbPosts.length;i++ ){
+      if(dbPosts[i].id === id){
+        return res.status(404).json({ success: false, message: 'post  already exist' });
+      }
+    }
+  }
+  }
+
+    const newPost=  new postmodel({
       id,userId,title,body
    })
 
   await newPost.save()
  
-   res.status(200).json({success:true,message:"User Created Successfully.", newPost})
+   res.status(200).json({success:true,message:"Post Created Successfully."})
   } catch (error) {
     console.log(error)
   return  res.status(500).json({success:false,message:"Interl server eror"})
@@ -225,7 +248,7 @@ const getPosts = async (req, res) => {
     if (!postsData) {
       return res.status(404).json({ success: false });
     }  
-    console.log(postsData)
+    
     res.status(200).json({ postsData });
   } catch (error) {
     console.log(error);
@@ -237,4 +260,4 @@ const getPosts = async (req, res) => {
 
 
 
-export {createUser,getUserData,updateUser,deleteUser,getDeleteUser,getUsers,getMockUsers,getPosts}
+export {createUser,getUserData,updateUser,deleteUser,getDeleteUser,getUsers,getMockUsers,getPosts,createPost}

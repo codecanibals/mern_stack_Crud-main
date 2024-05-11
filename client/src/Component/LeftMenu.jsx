@@ -11,7 +11,7 @@ function LeftMenu() {
   return (
     <>
       <div style={{ display: "flex", height: "100vh" }}>
-        <Sidebar className="app" style={{ backgroundColor: "grey" }}>
+        <Sidebar className="app" style={{ backgroundColor: "#2096ff",color:"black" }}>
           <Menu>
             <MenuItem
               className="menu1"
@@ -22,19 +22,22 @@ function LeftMenu() {
            component={<Link to="/UserTable" className="link" />}
           > GetUsers </MenuItem> */}
 
-            <SubMenu label="Employees">
+            <SubMenu label="Users" style={{fontSize:"17px"}}>
               <MenuItem component={<Link to="/UserTable" className="link" />}>
-                Get Employees Data
+                Get Users Data
+              </MenuItem>
+              <MenuItem component={<Link to="/AddUser" className="link" />}>
+                 Add User Data
               </MenuItem>
               <MenuItem component={<Link to="/DeletedUsersTable" className="link" />}>
-                Deleted Employees Data
+                Deleted Users Data
               </MenuItem>
               {/* <MenuItem >Bubble Chart</MenuItem> */}
             </SubMenu>
 
-            <SubMenu label="Posts">
+            <SubMenu label="Posts" style={{fontSize:"17px"}}>
               <MenuItem component={<Link to="/EmployeesPosts" className="link" />}>
-                Get Posts
+                Get Users Posts
               </MenuItem>
               {/* <MenuItem component={<Link to="/DeletedUsersTable" className="link" />}>
                 DeleteUsers
@@ -46,9 +49,9 @@ function LeftMenu() {
         </Sidebar>
         <section>
           <Routes>
-            {/* <Route path="/" element={<TempTable />} /> */}
+            <Route path="/" element={<TempTable />} />
 
-            <Route path="/" element={<></>} />
+            {/* <Route path="/" element={<></>} /> */}
             <Route path="/UserTable" element={<UserTable />} />
             <Route path="/DeletedUsersTable" element={<Deleteusertable/>} />
             <Route path="/EmployeesPosts" element={<PostsTable/>} />

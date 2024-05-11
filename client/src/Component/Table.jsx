@@ -78,16 +78,16 @@ export default function Table({ UpdatedUser,isUpdateLoading}) {
         <div className="table-wrapper">
           <div className="table-title">
             <div className="row">
-              <div className="col-sm-6">
-                <h2>
-                  Manage <b>Employees</b>
+              <div className="col-sm-6" >
+                <h2 >
+                  Manage <b>Users Data</b>
                 </h2>
               </div>
               <div className="col-sm-6">
                 {/* <a href="http://localhost:5173/api/getUsers" className="btn btn-success" >
                                     <span>Get Api Data</span>
                                 </a> */}
-                <a
+                {/* <a
                   href="#"
                   className="btn btn-success"
                   data-bs-toggle="modal"
@@ -95,7 +95,7 @@ export default function Table({ UpdatedUser,isUpdateLoading}) {
                 >
                   <i className="material-icons">&#xE147;</i>{" "}
                   <span>Add New Employee</span>
-                </a>
+                </a> */}
               </div>
             </div>
           </div>

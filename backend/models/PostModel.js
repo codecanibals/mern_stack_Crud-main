@@ -6,7 +6,7 @@ const postSchema= new mongoose.Schema({
         type:Number, 
         required:true
     },
-    userid:{
+    userId:{
         type:Number,
         required:true
     },

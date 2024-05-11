@@ -1,5 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import axios from 'axios'
+import toast from 'react-hot-toast'
 const PostsTable = () => {
 
   const [postsData, setPostsData] = useState([]);
@@ -19,23 +20,49 @@ const PostsTable = () => {
   };
   useEffect(() => {
     fetchPostsData();
-  },[isPostsLoading]);
+  },[]);
 
 
-// const createPost (postId)=>{
-//     console.log("hello")
-// }
+  const createPost = async (userId) => {
+    setIsPostsLoading(true)
+    console.log(userId)
+    let newPost = {}
+    for(let i = 0 ;i<postsData.length;i++){
+        if(postsData[i].id === userId){
+            newPost = postsData[i]
+        }
+    }
+    
+    try {
+      const addPost = await axios.post('http://localhost:8080/api/createPost', newPost)
+      console.log("Post is created")
+      const response =  addPost.data
+      
+      if (response.success) {
+          toast.success(response.message)
+          // CloseRef.current.click()
+      }
+
+  } catch (error) {
+      console.log(error)
+      if(!error.response.success){
+        toast.error(error.response.data.message)
+          // CloseRef.current.click()
+      }
+  }
+  
+  setIsPostsLoading(false)
+  };
 
   return (
     <>
-    {console.log(postsData)}
      <div className="container">
         <div className="table-wrapper">
           <div className="table-title">
             <div className="row">
               <div className="col-sm-6">
                 <h2>
-                  Manage <b> Employees Posts</b>
+                  Manage <b> Users Posts</b>
                 </h2>
               </div>
               {/* <div className="col-sm-6">
@@ -55,8 +82,8 @@ const PostsTable = () => {
             <thead>
               <tr>
                 <th></th>
-                <th>Post Id</th>
                 <th>Employee Id</th>
+                <th>Post Id</th>
                 <th>Post Title</th>
                 <th>Actions</th>
               </tr>
@@ -67,8 +94,8 @@ const PostsTable = () => {
                 return (
                   <tr>
                     <td></td>
-                    <td>{elem.id}</td>
                     <td>{elem.userId}</td>
+                    <td>{elem.id}</td>
                     <td>{elem.title}</td> 
                         <div>
                       <button onClick={() => createPost(elem.id)}>
