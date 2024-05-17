@@ -9,7 +9,9 @@ export default function AddUser() {
         name: '',
         username: '',
         email: '',
-        phone: ""
+        phone: "",
+        id:0,
+        status:"Available"
     })
     const handleOnchange = (e) => {
         setValue({
@@ -42,22 +44,22 @@ export default function AddUser() {
         <>
 
 
-            <div id="addEmployeeModal" className="modal fade">
+            {/* <div id="addEmployeeModal" className="modal fade">
                 <div className="modal-dialog">
-                    <div className="modal-content">
-                        <form onSubmit={handleSubmit}>
-                            <div className="modal-header">
-                                <h4 className="modal-title">Add Employee</h4>
-                                <button type="button" className="close" data-bs-dismiss="modal" aria-hidden="true" ref={CloseRef}>&times;</button>
+                    <div className="modal-content"> */}
+                        <form onSubmit={handleSubmit} style={{margin:"50px 0px 0px 180px"}}>
+                            <div className="">
+                                <h4 >Add Employee</h4>
+                               
                             </div>
-                            <div className="modal-body">
+                         
                                 <div className="form-group">
                                     <label>Name</label>
-                                    <input type="text" value={value.name} name='name' onChange={handleOnchange} className="form-control" required />
+                                    <input type="text" style={{width:"600px"}}value={value.name} name='name' onChange={handleOnchange} className="form-control" required />
                                 </div>
                                 <div className="form-group">
-                                    <label>Father </label>
-                                    <input type="text" value={value.fathername} name='fathername' onChange={handleOnchange} className="form-control" required />
+                                    <label>Username </label>
+                                    <input type="text" value={value.username} name='username' onChange={handleOnchange} className="form-control" required />
                                 </div>
                                 <div className="form-group">
                                     <label>Email</label>
@@ -68,16 +70,16 @@ export default function AddUser() {
                                     <label>Phone</label>
                                     <input type="text" value={value.phone} name='phone' onChange={handleOnchange} className="form-control" required />
                                 </div>
-                            </div>
+                         
                             <div className="modal-footer">
-                                <input type="button" className="btn btn-default" data-bs-dismiss="modal" value="Cancel" />
-                                <input type="submit" className="btn btn-primary" value="Add" />
+                                {/* <input type="button" className="btn btn-default" data-bs-dismiss="modal" value="Cancel"  /> */}
+                                <input type="submit" className="btn btn-primary" style={{width:"400px",margin:"20px 100px 0px 0px"}}value="Submit" />
                             </div>
 
                         </form>
-                    </div>
+                    {/* </div>
                 </div>
-            </div>
+            </div> */}
 
 
 

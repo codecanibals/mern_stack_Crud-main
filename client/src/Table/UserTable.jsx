@@ -68,7 +68,7 @@ export default function UserTable() {
         <>
             <Table Deletuser={deletuser} UpdatedUser={UpadteUserData} isUpdateLoading = {isUpdateLoading}></Table>
             
-            <AddUser></AddUser>
+            {/* <AddUser></AddUser> */}
             <UpdatedUser handleOnSubmit={handleOnSubmit} value={value} handlechange={handlechange}></UpdatedUser>
             {/* <DeletUser handleUserDelet={handleUserDelet} ></DeletUser> */}
             {/* <Deleteusertable isDeleteLoading = {isDeleteLoading} ></Deleteusertable> */}

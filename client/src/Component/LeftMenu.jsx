@@ -7,15 +7,18 @@ import UserTable from "../Table/UserTable";
 import TempTable from "./tempTable";
 import Deleteusertable from "./Deleteusertable";
 import PostsTable from "./Posts/PostsTable";
+import AddUser from "./AddUser";
 function LeftMenu() {
   return (
     <>
       <div style={{ display: "flex", height: "100vh" }}>
         <Sidebar className="app" style={{ backgroundColor: "#2096ff",color:"black" }}>
           <Menu>
+  
             <MenuItem
+               label = "Home"
               className="menu1"
-              component={<Link to="/UserTable" className="link" />}
+              component={<Link to="/" className="link" />}
             ></MenuItem>
 
             {/* <MenuItem
@@ -53,6 +56,7 @@ function LeftMenu() {
 
             {/* <Route path="/" element={<></>} /> */}
             <Route path="/UserTable" element={<UserTable />} />
+            <Route path="/AddUser" element={<AddUser />} />
             <Route path="/DeletedUsersTable" element={<Deleteusertable/>} />
             <Route path="/EmployeesPosts" element={<PostsTable/>} />
           </Routes>

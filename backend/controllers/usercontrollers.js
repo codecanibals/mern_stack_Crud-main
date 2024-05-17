@@ -3,17 +3,43 @@ import deleteusermodel from "../models/Deleteuser.js"
 import postmodel from "../models/PostModel.js"
 import axios from 'axios'
 import https from 'https'
-
+import defaultusermodel from "../models/DefaultUser.js"
 
  const createUser=async(req,res)=>{
   try {
-    const {name,username,email,phone,id}=req.body
-    const Newuser=  new usermodel({
-    name,username,email,phone,id
-   })
-
-  await Newuser.save()
-  // let users = this.getUsers()
+    
+    let {name,username,email,phone,id,status}=req.body
+    let maxId = 0;
+    let Newuser;
+    if(id===0){
+      const defaultUsers = await defaultusermodel.find();
+    
+        for(let i = 0 ;i<defaultUsers.length;i++){
+          
+          if(defaultUsers[i].id>maxId){
+            maxId = defaultUsers[i].id
+          }
+  
+        }
+        id = maxId +1;
+        Newuser=  new usermodel({
+          name,username,email,phone,id,status
+         })
+         
+        const newDefaultUser=  new defaultusermodel({
+          name,username,email,phone,id,status
+         })
+      
+        await Newuser.save()
+        await newDefaultUser.save()
+    }
+    else{
+        Newuser=  new usermodel({
+        name,username,email,phone,id,status
+       })
+    
+      await Newuser.save()
+    }
 
    res.status(200).json({success:true,message:"User Created Successfully.", Newuser})
   } catch (error) {
@@ -132,6 +158,24 @@ const getUsers = async (req, res) => {
     let dbUsers= await usermodel.find()
     let dbDeletedUsers= await deleteusermodel.find()
 
+    let dbDefaultUsers= await defaultusermodel.find()
+    console.log("from  db Default users")
+    console.log(dbDefaultUsers)
+    if(dbDefaultUsers.length < 1  ){
+      console.log("in the dbDefaultUsers Table")
+          for(let i = 0 ;i<users.length;i++){
+           
+            const newDefaultUser =  new defaultusermodel({
+              name:users[i].name,
+              username:users[i].username,
+              email:users[i].email,
+              phone:users[i].phone,
+              id:users[i].id
+             })
+          
+            await newDefaultUser.save()
+          }
+    }
 
     let finalUsers = [];
     let userFound = false;
@@ -139,17 +183,35 @@ const getUsers = async (req, res) => {
     if (users.length > 0 && dbUsers.length > 0) {
       console.log("users and dbUsers having data ...");
 
-      for (var i = 0; i < users.length; i++) {
-        for (var j = 0; j < dbUsers.length; j++) {
+      // for (var j = 0; j < dbUsers.length; j++) {
+      // for (var i = 0; i < users.length; i++) {
+      //     let usr = users[i];
+      //     let dbUsr= dbUsers[j];
+      //     if (dbUsr.id === usr.id) {
+      //       dbUsr.status = "Available";
+      //       finalUsers.push(dbUsr);
+      //       userFound = true
+      //     } 
+        
+      //   }
+
+    for (var i = 0; i < users.length; i++) {
+      for (var j = 0; j < dbUsers.length; j++) {
           let usr = users[i];
           let dbUsr= dbUsers[j];
+        
+          console.log("user id" + usr.id)
+          console.log("dbuser id" + dbUsr.id)
           if (dbUsr.id === usr.id) {
             dbUsr.status = "Available";
             finalUsers.push(dbUsr);
             userFound = true
-          } 
-        
+          }
+           else if(i===0 && dbUsr.status === "Available"){
+              finalUsers.push(dbUsers[j]);
+           }
         }
+     
         if(!userFound){
           let temp = {}
           temp.id = users[i].id;
