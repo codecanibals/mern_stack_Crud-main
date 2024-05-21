@@ -6,7 +6,8 @@ export default function Table({ UpdatedUser,isUpdateLoading}) {
 
   const [data, setData] = useState([]);
   const [isLoading,setIsLoading] = useState(false)
-  
+  const [postsdata, setPostsData] = useState([]);
+  const [postsDataLoading, setPostsDataLoading] = useState(false);
   
  
   const fetchData = async () => {
@@ -36,6 +37,7 @@ export default function Table({ UpdatedUser,isUpdateLoading}) {
             newUser = data[i]
         }
     }
+    newUser.status = "Active"
     try {
       const adduser = await axios.post('http://localhost:8080/api/createUser', newUser)
       console.log("main data here")
@@ -70,7 +72,33 @@ export default function Table({ UpdatedUser,isUpdateLoading}) {
   setIsLoading(false)
   };
 
-
+  const  handelUserPosts = async (userId)=>{
+    setPostsDataLoading(true)
+    console.log("inside handel User Posts" + userId)
+    try {
+      const usersPosts = await axios.get("http://localhost:8080/api/getUserPost");
+      const response = await usersPosts.data;
+      let tempPosts = ["No data Found"]
+      for(let i = 0 ;i<response.usersPost.length;i++){
+        console.log("inside post for loop + " + userId)
+        let usrPosts = response.usersPost[i];
+        if(usrPosts.userId === userId){
+          console.log("inside the if condtion " +  usrPosts.userId)
+          tempPosts.push(usrPosts);
+          console.log(tempPosts + " This is posts dataaaaaaaa")
+  
+        }
+      }
+        
+      setPostsData(tempPosts);
+     
+      setPostsDataLoading(false)
+      console.log("this is temp posts "+ postsdata)
+      
+    } catch (error) {
+      console.log(error);
+    }
+   }
 
   return (
     <>
@@ -96,6 +124,7 @@ export default function Table({ UpdatedUser,isUpdateLoading}) {
                 <th>Username</th>
                 <th>Email</th>
                 <th>Phone</th>
+                <th>Posts</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -108,7 +137,34 @@ export default function Table({ UpdatedUser,isUpdateLoading}) {
                     <td>{elem.username}</td>
                     <td>{elem.email}</td>
                     <td>{elem.phone}</td>  
-                    {elem.status ? (
+                    <td>
+                    <div className="dropdown" >
+                        <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" onClick ={()=>{handelUserPosts(elem.id)}}>
+                        </button>
+                       
+                        <div className="dropdown-menu" style={{width:"310px",height:"500px", margin:"100px 200px 0px 0px" }} aria-labelledby="dropdownMenuButton" onClick ={()=>{handelUserPosts(elem.id)}}>
+                            <table>
+                              <thead>
+                                <th>id</th>
+                                <th style={{width:"70%"}}>title</th>
+                                {/* <th>body</th> */}
+                              </thead>            
+                              <tbody>
+                              {postsdata?.map((elem, index) => {
+                                return (
+                                    <tr>
+                                <td>{elem.id}</td>
+                                <td style={{width:"70%"}}>{elem.title}</td>
+                                {/* <td>{elem.body}</td> */}
+                                </tr>
+                                );
+                                 })}
+                              </tbody>
+                            </table>
+                        </div>
+                      </div>  
+                    </td>   
+                    {elem.status === "Active" ? (
                       <td>
                         <div>
                         <a
@@ -129,10 +185,7 @@ export default function Table({ UpdatedUser,isUpdateLoading}) {
                         <a
                           href="#"
                           className="delete cursor-pointer"
-                          // data-bs-toggle="modal"
-                          // data-bs-target="#deleteEmployeeModal"
                           onClick={() => deleteUser(elem._id)}
-                          // onClick={() => Deletuser(elem._id)}
                         >
                           <i
                             className="material-icons"
@@ -144,7 +197,6 @@ export default function Table({ UpdatedUser,isUpdateLoading}) {
                         </a>
                         
                         </div>
-                        {/* <a className="delete" data-bas-toggle='modal' data-bs-target='#deleteEmployeeModal'><i className="material-icons" data-bs-toggle="tooltip" title="Delete">&#xE872;</i></a> */}
                       </td>
                     ) : (
                         <div>

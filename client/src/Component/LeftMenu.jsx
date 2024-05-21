@@ -16,7 +16,6 @@ function LeftMenu() {
           <Menu>
   
             <MenuItem
-               label = "Home"
               className="menu1"
               component={<Link to="/" className="link" />}
             ></MenuItem>

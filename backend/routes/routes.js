@@ -1,6 +1,6 @@
 import express from 'express'
 import axios from 'axios'
-import { createUser,getUserData,updateUser,deleteUser,getDeleteUser,getUsers,getMockUsers,getPosts,createPost} from '../controllers/usercontrollers.js'
+import { createUser,getUserData,updateUser,deleteUser,getDeleteUser,getUsers,getMockUsers,getPosts,createPost,getUserPost} from '../controllers/usercontrollers.js'
 
 const routers=express.Router()
 
@@ -13,6 +13,7 @@ routers.get('/getUsers',getUsers)
 routers.get('/getMockUsers',getMockUsers)
 routers.post('/createPost',createPost)
 routers.get('/getPosts',getPosts)
+routers.get('/getUserPost',getUserPost)
 
 
 export default routers

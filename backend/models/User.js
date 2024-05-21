@@ -27,6 +27,10 @@ const userSchema= new mongoose.Schema({
     status:{
         type:String
     },
+    // posts:{
+    //     type:Array,
+    //     default:[]
+    // },
 },{timestamps:true})
 
 const usermodel= mongoose.model('user',userSchema)

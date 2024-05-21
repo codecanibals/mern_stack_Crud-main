@@ -4,6 +4,7 @@ import postmodel from "../models/PostModel.js"
 import axios from 'axios'
 import https from 'https'
 import defaultusermodel from "../models/DefaultUser.js"
+import { runInNewContext } from "vm"
 
  const createUser=async(req,res)=>{
   try {
@@ -69,13 +70,19 @@ const getUserData=async(req,res)=>{
 const getDeleteUser=async(req,res)=>{
        
    try {
-    const usersdeleted= await deleteusermodel.find()
-    console.log(usersdeleted)
+    let finalUsersDeleted = [];
+    const usersdeleted= await usermodel.find()
+    // console.log(usersdeleted)
     if (!usersdeleted) {
       return  res.status(404).json({success:false})
     }
-
-    res.status(200).json({usersdeleted})
+    
+    for(let i = 0 ;i<usersdeleted.length;i++){
+      if(usersdeleted[i].status === "Deactivate"){
+        finalUsersDeleted.push(usersdeleted[i])
+      }
+    }
+    res.status(200).json({finalUsersDeleted})
 
 } catch (error) {
     console.log(error)
@@ -105,21 +112,22 @@ const updateUser=async(req,res)=>{
 const deleteUser=async(req,res)=>{
 try {
    const userId=req.params.id
-   const deletuser= await usermodel.findByIdAndDelete(userId)
+   const deletuser= await usermodel.findByIdAndUpdate(userId,{status:"Deactivate"})
 
-   const Deleteuser=  new deleteusermodel({
-       name:deletuser['name'],
-       email:deletuser['email'],
-       phone:deletuser['phone'],
-       id:deletuser['id'],
-       username:deletuser['username']
-   })
-   await Deleteuser.save()
+  //  const Deleteuser=  new deleteusermodel({
+  //      name:deletuser['name'],
+  //      email:deletuser['email'],
+  //      phone:deletuser['phone'],
+  //      id:deletuser['id'],
+  //      username:deletuser['username'],
+  //      status:deletuser['status']
+  //  })
+  //  await Deleteuser.save()
 
    if (!deletuser) {
    return res.status(404).json({ success: false, message: 'user Not found' });
    }
-   res.status(200).json({ success: true, message: 'user Deleted successfully' });
+   res.status(200).json({ success: true, message: 'user Deactivated successfully' });
 } catch (error) {
     console.log(error)
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -157,10 +165,12 @@ const getUsers = async (req, res) => {
 
     let dbUsers= await usermodel.find()
     let dbDeletedUsers= await deleteusermodel.find()
-
+    let dbUsersPosts= await postmodel.find()
     let dbDefaultUsers= await defaultusermodel.find()
-    console.log("from  db Default users")
-    console.log(dbDefaultUsers)
+
+    // console.log("from  db Default users")
+    // console.log(dbDefaultUsers)
+
     if(dbDefaultUsers.length < 1  ){
       console.log("in the dbDefaultUsers Table")
           for(let i = 0 ;i<users.length;i++){
@@ -183,31 +193,21 @@ const getUsers = async (req, res) => {
     if (users.length > 0 && dbUsers.length > 0) {
       console.log("users and dbUsers having data ...");
 
-      // for (var j = 0; j < dbUsers.length; j++) {
-      // for (var i = 0; i < users.length; i++) {
-      //     let usr = users[i];
-      //     let dbUsr= dbUsers[j];
-      //     if (dbUsr.id === usr.id) {
-      //       dbUsr.status = "Available";
-      //       finalUsers.push(dbUsr);
-      //       userFound = true
-      //     } 
-        
-      //   }
-
     for (var i = 0; i < users.length; i++) {
       for (var j = 0; j < dbUsers.length; j++) {
           let usr = users[i];
           let dbUsr= dbUsers[j];
         
-          console.log("user id" + usr.id)
-          console.log("dbuser id" + dbUsr.id)
-          if (dbUsr.id === usr.id) {
-            dbUsr.status = "Available";
+          if (dbUsr.id === usr.id && dbUsr.status === "Active") {
+            // dbUsr.status = "Active";
+            // dbUsr.posts = [];
+            // dbUsr.status = "Available";
             finalUsers.push(dbUsr);
             userFound = true
           }
-           else if(i===0 && dbUsr.status === "Available"){
+          //  else if(i===0 && dbUsr.status === "Available"){
+           else if(i===0 && dbUsr.status === "Active" && dbUsers[j].id>10){
+              // dbUsers[j].posts = []
               finalUsers.push(dbUsers[j]);
            }
         }
@@ -219,7 +219,7 @@ const getUsers = async (req, res) => {
           temp.username = users[i].username;
           temp.email = users[i].email;
           temp.phone = users[i].phone;
-         
+          temp.status = "Deactivated"
           finalUsers.push(temp)
           temp = {}
         }
@@ -235,21 +235,33 @@ const getUsers = async (req, res) => {
       }
     }
 
-    if(dbDeletedUsers.length>0){
   
-      for(let m = 0 ;m<dbDeletedUsers.length;m++){
-    for(let k = 0 , len = finalUsers.length ;k<len;k++){
-           if (finalUsers[k].id === dbDeletedUsers[m].id){
-            console.log("I am from final users : " + finalUsers[k].id)
-            console.log("I am from dbdeleted users : " + dbDeletedUsers[m].id )
-            console.log("users is deleteing for main data")
+      for(let m = 0 ;m<dbUsers.length;m++){
+   
+           if (dbUsers[m].status === "Deactivate"){
+            for(let k = 0 , len = finalUsers.length ;k<len;k++){
+              if (finalUsers[k].id === dbUsers[m].id){
+                console.log("inside deleted Users")
             finalUsers.splice(k,1)
             len = finalUsers.length
+              }
            }
       }
     }
-  }
 
+  //   if(dbDeletedUsers.length>0){
+  
+  //     for(let m = 0 ;m<dbDeletedUsers.length;m++){
+  //   for(let k = 0 , len = finalUsers.length ;k<len;k++){
+  //          if (finalUsers[k].id === dbDeletedUsers[m].id){
+  //           finalUsers.splice(k,1)
+  //           len = finalUsers.length
+  //          }
+  //     }
+  //   }
+  // }
+
+    console.log("final Users")
     console.log(finalUsers)
     res.status(200).json({ finalUsers});
  } catch (error) {
@@ -318,8 +330,33 @@ const getPosts = async (req, res) => {
   }
 }
 
+const getUserPost = async (req, res) => {
+
+  // let {userId} = req.body;
+  // let userPosts = [];
+  try {
+    const usersPost = await postmodel.find();
+    
+    if (!usersPost) {
+      return res.status(404).json({ success: false });
+    }  
+
+    // for(let i=0 ;i<usersPosts.length;i++){
+    //   if(userId === usersPosts[i].userId){
+    //     userPosts.push(usersPosts[i])
+    //   } 
+    // }
+    console.log("usersPost : " + usersPost)
+
+    res.status(200).json({ usersPost });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false });
+  }
+}
 
 
 
 
-export {createUser,getUserData,updateUser,deleteUser,getDeleteUser,getUsers,getMockUsers,getPosts,createPost}
+
+export {createUser,getUserData,updateUser,deleteUser,getDeleteUser,getUsers,getMockUsers,getPosts,createPost , getUserPost}

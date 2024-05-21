@@ -11,7 +11,7 @@ export default function AddUser() {
         email: '',
         phone: "",
         id:0,
-        status:"Available"
+        status:"Active",
     })
     const handleOnchange = (e) => {
         setValue({
@@ -49,7 +49,7 @@ export default function AddUser() {
                     <div className="modal-content"> */}
                         <form onSubmit={handleSubmit} style={{margin:"50px 0px 0px 180px"}}>
                             <div className="">
-                                <h4 >Add Employee</h4>
+                                <h4 >Add User</h4>
                                
                             </div>
                          

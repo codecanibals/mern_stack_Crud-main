@@ -37,25 +37,29 @@ const Deleteusertable = ({isDeleteLoading}) => {
                     </div>
                     <table className="table table-striped table-hover">
                         <thead>
-                            <tr>
+                            <tr style={{width:"600px"}}>
                                 <th></th>
                                 <th>Name</th>
                                 <th>Username</th>
                                 <th>Email</th>
                                 <th>Phone</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {deleteUserData.usersdeleted?.map((elem, index) => {
+                            {deleteUserData.finalUsersDeleted?.map((elem, index) => {
                           
                                 return (
                                 
-                                    <tr>
+                                    <tr >
                                         <td></td>
                                         <td>{elem.name}</td>
                                         <td>{elem.username}</td>
                                         <td>{elem.email}</td>
-                                        <td>{elem.phone}</td>
+                                        <td style={{width:"250px"}}>{elem.phone}</td>
+                                        <td>
+                                            <button>Activate</button>
+                                        </td>
                                     </tr>
                                 )
                             })}
