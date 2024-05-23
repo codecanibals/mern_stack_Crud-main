@@ -92,6 +92,26 @@ const getDeleteUser=async(req,res)=>{
 
 }
 
+const reactivateUser=async(req,res)=>{
+       
+   try {
+    const userId=req.params.id
+   
+    const userAcivated= await usermodel.findByIdAndUpdate(userId,req.body,{new:true})
+    // console.log(usersdeleted)
+    if (!userAcivated) {
+      return  res.status(404).json({success:false})
+    }
+    res.status(200).json({success:true,message:"User reactivated successfully"})
+
+} catch (error) {
+    console.log(error)
+    
+    res.status(500).json({success:false})
+   }
+
+}
+
 ////////update user api
 const updateUser=async(req,res)=>{
  try {

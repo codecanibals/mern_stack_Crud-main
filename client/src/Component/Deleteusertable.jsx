@@ -21,7 +21,13 @@ const Deleteusertable = ({isDeleteLoading}) => {
         }
         FeatchDataa()
 
-    }, [isDeleteLoading])
+    }, [isDeleteLoading]) 
+
+    const handelActivate = async (userId,userData)=>{
+        console.log(userData)
+         userData.status = "Available"
+        const UpdatedUser = await axios.put(`http://localhost:8080/api/updateUser/${userId}`,userData)
+    }
 
   return (
     <>
@@ -58,7 +64,7 @@ const Deleteusertable = ({isDeleteLoading}) => {
                                         <td>{elem.email}</td>
                                         <td style={{width:"250px"}}>{elem.phone}</td>
                                         <td>
-                                            <button>Activate</button>
+                                            <button onClick={()=>{handelActivate(elem._id,elem)}}>Activate</button>
                                         </td>
                                     </tr>
                                 )
