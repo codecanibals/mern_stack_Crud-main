@@ -2,103 +2,103 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-export default function Table({ UpdatedUser,isUpdateLoading}) {
-
+export default function Table({ UpdatedUser, isUpdateLoading }) {
   const [data, setData] = useState([]);
-  const [isLoading,setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [postsdata, setPostsData] = useState([]);
   const [postsDataLoading, setPostsDataLoading] = useState(false);
-  
- 
+
   const fetchData = async () => {
     try {
       const user = await axios.get("http://localhost:8080/api/getUsers");
       const response = await user.data;
-  
+
       setData(response.finalUsers);
-      console.log("this is users data")
-      console.log(response.finalUsers)
-      
+      console.log("this is users data");
+      console.log(response.finalUsers);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
     fetchData();
-  },[isLoading,isUpdateLoading]);
+  }, [isLoading, isUpdateLoading]);
 
-
-  
   const createUser = async (userId) => {
-    setIsLoading(true)
-    let newUser = {}
-    for(let i = 0 ;i<data.length;i++){
-        if(data[i].id === userId){
-            newUser = data[i]
-        }
+    setIsLoading(true);
+    let newUser = {};
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].id === userId) {
+        newUser = data[i];
+      }
     }
-    newUser.status = "Active"
+    newUser.status = "Active";
     try {
-      const adduser = await axios.post('http://localhost:8080/api/createUser', newUser)
-      console.log("main data here")
-      console.log(data)
-      const response = adduser.data
+      const adduser = await axios.post(
+        "http://localhost:8080/api/createUser",
+        newUser
+      );
+      console.log("main data here");
+      console.log(data);
+      const response = adduser.data;
       if (response.success) {
-          toast.success(response.Message)
-          CloseRef.current.click()
+        toast.success(response.Message);
+        CloseRef.current.click();
       }
 
-      console.log(response)
-  } catch (error) {
-      console.log(error)
-  }
-  setIsLoading(false)
-  };
-
-  const deleteUser = async (userId) => {
-    setIsLoading(true)
-     console.log(userId);
-    try {
-      const DeletUser = await axios.delete(`http://localhost:8080/api/deleteUser/${userId}`)
-      const response = DeletUser.data
-            if (response.success) {
-                toast.success(response.message)
-            }
-
-      console.log(response)
-  } catch (error) {
-      console.log(error)
-  }
-  setIsLoading(false)
-  };
-
-  const  handelUserPosts = async (userId)=>{
-    setPostsDataLoading(true)
-    console.log("inside handel User Posts" + userId)
-    try {
-      const usersPosts = await axios.get("http://localhost:8080/api/getUserPost");
-      const response = await usersPosts.data;
-      let tempPosts = ["No data Found"]
-      for(let i = 0 ;i<response.usersPost.length;i++){
-        console.log("inside post for loop + " + userId)
-        let usrPosts = response.usersPost[i];
-        if(usrPosts.userId === userId){
-          console.log("inside the if condtion " +  usrPosts.userId)
-          tempPosts.push(usrPosts);
-          console.log(tempPosts + " This is posts dataaaaaaaa")
-  
-        }
-      }
-        
-      setPostsData(tempPosts);
-     
-      setPostsDataLoading(false)
-      console.log("this is temp posts "+ postsdata)
-      
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
-   }
+    setIsLoading(false);
+  };
+
+  const deleteUser = async (userId) => {
+    setIsLoading(true);
+    console.log(userId);
+    try {
+      const DeletUser = await axios.delete(
+        `http://localhost:8080/api/deleteUser/${userId}`
+      );
+      const response = DeletUser.data;
+      if (response.success) {
+        toast.success(response.message);
+      }
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(false);
+  };
+
+  const handelUserPosts = async (userId) => {
+    setPostsDataLoading(true);
+    console.log("inside handel User Posts" + userId);
+    try {
+      const usersPosts = await axios.get(
+        "http://localhost:8080/api/getUserPost"
+      );
+      const response = await usersPosts.data;
+      let tempPosts = ["No data Found"];
+      for (let i = 0; i < response.usersPost.length; i++) {
+        console.log("inside post for loop + " + userId);
+        let usrPosts = response.usersPost[i];
+        if (usrPosts.userId === userId) {
+          console.log("inside the if condtion " + usrPosts.userId);
+          tempPosts.push(usrPosts);
+          console.log(tempPosts + " This is posts dataaaaaaaa");
+        }
+      }
+
+      setPostsData(tempPosts);
+
+      setPostsDataLoading(false);
+      console.log("this is temp posts " + postsdata);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -106,14 +106,12 @@ export default function Table({ UpdatedUser,isUpdateLoading}) {
         <div className="table-wrapper">
           <div className="table-title">
             <div className="row">
-              <div className="col-sm-6" >
-                <h2 >
+              <div className="col-sm-6">
+                <h2>
                   Manage <b>Users Data</b>
                 </h2>
               </div>
-              <div className="col-sm-6">
-        
-              </div>
+              <div className="col-sm-6"></div>
             </div>
           </div>
           <table className="table table-striped table-hover">
@@ -136,13 +134,43 @@ export default function Table({ UpdatedUser,isUpdateLoading}) {
                     <td>{elem.name}</td>
                     <td>{elem.username}</td>
                     <td>{elem.email}</td>
-                    <td>{elem.phone}</td>  
+                    <td>{elem.phone}</td>
                     <td>
-                    <div className="dropdown" >
-                        <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" onClick ={()=>{handelUserPosts(elem.id)}}>
-                        </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-toggle="modal"
+                        data-target="#exampleModal"
+                        onClick ={()=>{handelUserPosts(elem.id)}}
+                      >
+                        Posts
+                      </button>
+
+                      <div
+                        class="modal fade"
+                        id="exampleModal"
+                        tabindex="-1"
+                        role="dialog"
+                        aria-labelledby="exampleModalLabel"
+                        aria-hidden="true"
+                      >
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">
+                                Posts
+                              </h5>
+                              <button
+                                type="button"
+                                class="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                              >
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
                        
-                        <div className="dropdown-menu" style={{width:"310px",height:"500px", margin:"100px 200px 0px 0px" }} aria-labelledby="dropdownMenuButton" onClick ={()=>{handelUserPosts(elem.id)}}>
                             <table>
                               <thead>
                                 <th>id</th>
@@ -161,49 +189,62 @@ export default function Table({ UpdatedUser,isUpdateLoading}) {
                                  })}
                               </tbody>
                             </table>
+                   
+                            </div>
+                            <div class="modal-footer">
+                              <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-dismiss="modal"
+                              >
+                                Close
+                              </button>
+                              <button type="button" class="btn btn-primary">
+                                Save changes
+                              </button>
+                            </div>
+                          </div>
                         </div>
-                      </div>  
-                    </td>   
+                      </div>
+                    </td>
                     {elem.status === "Active" ? (
                       <td>
                         <div>
-                        <a
-                          href="#"
-                          className="edit cursor-pointer"
-                          data-bs-toggle="modal"
-                          data-bs-target="#editEmployeeModal"
-                          onClick={() => UpdatedUser(elem._id,elem)}
-                        >
-                          <i
-                            className="material-icons"
-                            data-bs-toggle="tooltip"
-                            title="Edit"
+                          <a
+                            href="#"
+                            className="edit cursor-pointer"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editEmployeeModal"
+                            onClick={() => UpdatedUser(elem._id, elem)}
                           >
-                            &#xE254;
-                          </i>
-                        </a>
-                        <a
-                          href="#"
-                          className="delete cursor-pointer"
-                          onClick={() => deleteUser(elem._id)}
-                        >
-                          <i
-                            className="material-icons"
-                            data-bs-toggle="tooltip"
-                            title="delete"
+                            <i
+                              className="material-icons"
+                              data-bs-toggle="tooltip"
+                              title="Edit"
+                            >
+                              &#xE254;
+                            </i>
+                          </a>
+                          <a
+                            href="#"
+                            className="delete cursor-pointer"
+                            onClick={() => deleteUser(elem._id)}
                           >
-                            &#xE872;
-                          </i>
-                        </a>
-                        
+                            <i
+                              className="material-icons"
+                              data-bs-toggle="tooltip"
+                              title="delete"
+                            >
+                              &#xE872;
+                            </i>
+                          </a>
                         </div>
                       </td>
                     ) : (
-                        <div>
-                      <button onClick={() => createUser(elem.id,elem._id)}>
-                        <i className="fa-solid fa-plus"></i>
-                      </button>
-                   
+                      <div>
+                        <button onClick={() => createUser(elem.id, elem._id)}>
+                          <i className="fa-solid fa-plus"></i>
+                        </button>
                       </div>
                     )}
                   </tr>

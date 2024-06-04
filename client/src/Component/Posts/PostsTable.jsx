@@ -65,17 +65,6 @@ const PostsTable = () => {
                   Manage <b> Users Posts</b>
                 </h2>
               </div>
-              {/* <div className="col-sm-6">
-                <a
-                  href="#"
-                  className="btn btn-success"
-                  data-bs-toggle="modal"
-                  data-bs-target="#addEmployeeModal"
-                >
-                  <i className="material-icons">&#xE147;</i>{" "}
-                  <span>Add New Employee</span>
-                </a>
-              </div> */}
             </div>
           </div>
           <table className="table table-striped table-hover">

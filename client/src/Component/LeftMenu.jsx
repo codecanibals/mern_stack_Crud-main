@@ -7,6 +7,7 @@ import UserTable from "../Table/UserTable";
 import TempTable from "./tempTable";
 import Deleteusertable from "./Deleteusertable";
 import PostsTable from "./Posts/PostsTable";
+import CommentsTable from "./Comments/CommentTable";
 import AddUser from "./AddUser";
 function LeftMenu() {
   return (
@@ -38,13 +39,15 @@ function LeftMenu() {
             </SubMenu>
 
             <SubMenu label="Posts" style={{fontSize:"17px"}}>
+
               <MenuItem component={<Link to="/EmployeesPosts" className="link" />}>
                 Get Users Posts
               </MenuItem>
-              {/* <MenuItem component={<Link to="/DeletedUsersTable" className="link" />}>
-                DeleteUsers
-              </MenuItem> */}
-              {/* <MenuItem >Bubble Chart</MenuItem> */}
+
+              <MenuItem component={<Link to="/EmployeesComments" className="link" />}>
+                Get Users Comments
+              </MenuItem>
+            
             </SubMenu>
 
           </Menu>
@@ -58,6 +61,7 @@ function LeftMenu() {
             <Route path="/AddUser" element={<AddUser />} />
             <Route path="/DeletedUsersTable" element={<Deleteusertable/>} />
             <Route path="/EmployeesPosts" element={<PostsTable/>} />
+            <Route path="/EmployeesComments" element={<CommentsTable/>} />
           </Routes>
         </section>
       </div>

@@ -5,6 +5,7 @@ import axios from 'axios'
 import https from 'https'
 import defaultusermodel from "../models/DefaultUser.js"
 import { runInNewContext } from "vm"
+import commentmodel from "../models/CommentsModel.js"
 
  const createUser=async(req,res)=>{
   try {
@@ -350,22 +351,76 @@ const getPosts = async (req, res) => {
   }
 }
 
-const getUserPost = async (req, res) => {
+const commentUrl = "https://jsonplaceholder.typicode.com/comments";
 
-  // let {userId} = req.body;
-  // let userPosts = [];
+const getComments = async (req, res) => {
+
+  try {
+    const comments = await axios.get(commentUrl, { httpsAgent });
+    let commentsData = comments.data;
+
+    if (!commentsData) {
+      return res.status(404).json({ success: false });
+    }  
+    
+    res.status(200).json({ commentsData });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false });
+  }
+}
+
+const createComment=async(req,res)=>{
+
+  console.log("inside create comment")
+  console.log(req.body)
+  
+  let dbComments = await commentmodel.find()
+  let postsData = await postmodel.find()
+
+  const {id,postId,body}=req.body
+  let postIsPresent = false;
+  try {
+  if(postsData){
+    for(let i = 0 ; i<postsData.length;i++ ){
+      if(postId === postsData[i].id){
+        userIsPresent = true
+      }
+    }
+  }
+
+  if(!userIsPresent){
+    return res.status(404).json({ success: false, message: 'post Not found' });
+  }else{
+  if(dbComments){
+    for(let i = 0 ; i<dbComments.length;i++ ){
+      if(dbComments[i].id === id){
+        return res.status(404).json({ success: false, message: 'comment  already exist' });
+      }
+    }
+  }
+  }
+
+    const newComment =  new commentmodel({
+      id,postId,body
+   })
+
+  await newComment.save()
+ 
+   res.status(200).json({success:true,message:"comment Created Successfully."})
+  } catch (error) {
+    console.log(error)
+  return  res.status(500).json({success:false,message:"Interl server eror"})
+  }
+}
+
+const getUserPost = async (req, res) => {
   try {
     const usersPost = await postmodel.find();
     
     if (!usersPost) {
       return res.status(404).json({ success: false });
     }  
-
-    // for(let i=0 ;i<usersPosts.length;i++){
-    //   if(userId === usersPosts[i].userId){
-    //     userPosts.push(usersPosts[i])
-    //   } 
-    // }
     console.log("usersPost : " + usersPost)
 
     res.status(200).json({ usersPost });
@@ -379,4 +434,4 @@ const getUserPost = async (req, res) => {
 
 
 
-export {createUser,getUserData,updateUser,deleteUser,getDeleteUser,getUsers,getMockUsers,getPosts,createPost , getUserPost}
+export {createUser,getUserData,updateUser,deleteUser,getDeleteUser,getUsers,getMockUsers,getPosts,createPost , getUserPost,getComments,createComment}
