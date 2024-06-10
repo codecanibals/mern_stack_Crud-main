@@ -384,12 +384,12 @@ const createComment=async(req,res)=>{
   if(postsData){
     for(let i = 0 ; i<postsData.length;i++ ){
       if(postId === postsData[i].id){
-        userIsPresent = true
+        postIsPresent = true
       }
     }
   }
 
-  if(!userIsPresent){
+  if(!postIsPresent){
     return res.status(404).json({ success: false, message: 'post Not found' });
   }else{
   if(dbComments){

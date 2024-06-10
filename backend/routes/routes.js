@@ -14,7 +14,7 @@ routers.get('/getMockUsers',getMockUsers)
 routers.post('/createPost',createPost)
 routers.get('/getPosts',getPosts)
 routers.get('/getUserPost',getUserPost)
-routers.get('/createComment',createComment)
+routers.post('/createComment',createComment)
 routers.get('/getComments',getComments)
 
 
