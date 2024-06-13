@@ -430,8 +430,24 @@ const getUserPost = async (req, res) => {
   }
 }
 
+const getUsersComments = async (req, res) => {
+  try {
+    const usersComments = await commentmodel.find();
+    
+    if (!usersComments) {
+      return res.status(404).json({ success: false });
+    }  
+    console.log("usersComments : " + usersComments)
+
+    res.status(200).json({ usersComments });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false });
+  }
+}
 
 
 
 
-export {createUser,getUserData,updateUser,deleteUser,getDeleteUser,getUsers,getMockUsers,getPosts,createPost , getUserPost,getComments,createComment}
+
+export {createUser,getUserData,updateUser,deleteUser,getDeleteUser,getUsers,getMockUsers,getPosts,createPost , getUserPost,getComments,createComment,getUsersComments}

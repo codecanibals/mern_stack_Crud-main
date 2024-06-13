@@ -6,6 +6,7 @@ export default function Table({ UpdatedUser, isUpdateLoading }) {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [postsdata, setPostsData] = useState([]);
+  const [commentsdata, setCommentsData] = useState([]);
   const [postsDataLoading, setPostsDataLoading] = useState(false);
 
   const fetchData = async () => {
@@ -100,6 +101,44 @@ export default function Table({ UpdatedUser, isUpdateLoading }) {
     }
   };
 
+  const handelUserComments = async (id) => {
+    setPostsDataLoading(true);
+    console.log("inside handel User Comments" + id);
+    try {
+      const usersComment = await axios.get(
+        "http://localhost:8080/api/getUsersComments"
+      );
+      const response = await usersComment.data;
+     
+      let tempComments = [];
+      let tempPostsData = [];
+      
+       console.log(postsdata)
+      for(let i = 0 ;i<postsdata.length;i++){
+         if(postsdata[i].userId == id ){
+          tempPostsData.push(postsdata[i]);
+         }
+      }
+
+      for(let j = 0 ; j<response.usersComments.length;j++){
+        for(let k = 0 ;k<tempPostsData.length;k++){
+          if(response.usersComments[j].postId == tempPostsData[k].id){
+            tempComments.push(response.usersComments[j])
+          }
+        }
+      }
+
+      console.log("This is temp Post Data " );
+      console.log(tempPostsData)
+    console.log("This is temp Comment Data " )
+    console.log(tempComments)
+      setCommentsData(tempComments);
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div className="container">
@@ -123,6 +162,7 @@ export default function Table({ UpdatedUser, isUpdateLoading }) {
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Posts</th>
+                <th>Comments</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -207,6 +247,78 @@ export default function Table({ UpdatedUser, isUpdateLoading }) {
                         </div>
                       </div>
                     </td>
+                    <td>
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-toggle="modal"
+                        data-target="#exampleModalComment"
+                        onClick ={()=>{handelUserComments(elem.id)}}
+                      >
+                        Comments
+                      </button>
+
+                      <div
+                        class="modal fade"
+                        id="exampleModalComment"
+                        tabindex="-1"
+                        role="dialog"
+                        aria-labelledby="exampleModalLabelComment"
+                        aria-hidden="true"
+                      >
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabelComment">
+                                Comments
+                              </h5>
+                              <button
+                                type="button"
+                                class="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                              >
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                       
+                            <table>
+                              <thead>
+                                <th>id</th>
+                                <th style={{width:"70%"}}>title</th>
+                                {/* <th>body</th> */}
+                              </thead>            
+                              <tbody>
+                              {commentsdata?.map((elem, index) => {
+                                return (
+                                    <tr>
+                                <td>{elem.id}</td>
+                                <td style={{width:"70%"}}>{elem.title}</td>
+                                {/* <td>{elem.body}</td> */}
+                                </tr>
+                                );
+                                 })}
+                              </tbody>
+                            </table>
+                   
+                            </div>
+                            <div class="modal-footer">
+                              <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-dismiss="modal"
+                              >
+                                Close
+                              </button>
+                              <button type="button" class="btn btn-primary">
+                                Save changes
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
                     {elem.status === "Active" ? (
                       <td>
                         <div>
@@ -240,6 +352,7 @@ export default function Table({ UpdatedUser, isUpdateLoading }) {
                           </a>
                         </div>
                       </td>
+                      
                     ) : (
                       <div>
                         <button onClick={() => createUser(elem.id, elem._id)}>

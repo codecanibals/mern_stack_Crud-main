@@ -44,6 +44,17 @@ function LeftMenu() {
                 Get Users Posts
               </MenuItem>
 
+              {/* <MenuItem component={<Link to="/EmployeesComments" className="link" />}>
+                Get Users Comments
+              </MenuItem> */}
+            
+            </SubMenu>
+            <SubMenu label="Comments" style={{fontSize:"17px"}}>
+
+              {/* <MenuItem component={<Link to="/EmployeesPosts" className="link" />}>
+                Get Users Posts
+              </MenuItem> */}
+
               <MenuItem component={<Link to="/EmployeesComments" className="link" />}>
                 Get Users Comments
               </MenuItem>
