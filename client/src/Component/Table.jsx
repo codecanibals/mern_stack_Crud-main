@@ -102,7 +102,7 @@ export default function Table({ UpdatedUser, isUpdateLoading }) {
   };
 
   const handelUserComments = async (id) => {
-    setPostsDataLoading(true);
+  
     console.log("inside handel User Comments" + id);
     try {
       const usersComment = await axios.get(
@@ -110,29 +110,42 @@ export default function Table({ UpdatedUser, isUpdateLoading }) {
       );
       const response = await usersComment.data;
      
-      let tempComments = [];
+      let tempComments = response.usersComments;
       let tempPostsData = [];
-      
-       console.log(postsdata)
+      // let filteredComments = [];
+      console.log("This is Post Data : " , postsdata)
       for(let i = 0 ;i<postsdata.length;i++){
          if(postsdata[i].userId == id ){
           tempPostsData.push(postsdata[i]);
          }
       }
 
-      for(let j = 0 ; j<response.usersComments.length;j++){
-        for(let k = 0 ;k<tempPostsData.length;k++){
-          if(response.usersComments[j].postId == tempPostsData[k].id){
-            tempComments.push(response.usersComments[j])
-          }
-        }
-      }
+     console.log("This is usersComments " , tempComments)
+     console.log("This is temp posts data " , tempPostsData)
 
-      console.log("This is temp Post Data " );
-      console.log(tempPostsData)
-    console.log("This is temp Comment Data " )
-    console.log(tempComments)
-      setCommentsData(tempComments);
+     const filteredComments = tempComments.filter(comment => {
+      return postsdata.some(post => post.id === comment.postId);
+    });
+
+    // for(let i = 0 ;i<tempComments.length;i++){
+    //   for(let k = 0 ;k<tempPostsData.length;k++){
+    //     if(tempComments[i].postId === tempPostsData[k].id){
+    //       console.log("inside for loop Comment Data" , tempComments[i])
+    //       console.log("inside for loop post Data" , tempPostsData[k])
+    //       filteredComments.push(tempComments[i]);
+    //       break;
+    //     }
+    //   }
+       
+    // }
+
+    console.log("Filtered Comments: ", filteredComments);
+    console.log("Temp Comments: ", tempComments);
+      console.log("Posts Data: ", postsdata);
+
+    // console.log("This is temp Comment Data " , tempComments)
+  
+      setCommentsData(filteredComments);
       
     } catch (error) {
       console.log(error);
@@ -239,9 +252,9 @@ export default function Table({ UpdatedUser, isUpdateLoading }) {
                               >
                                 Close
                               </button>
-                              <button type="button" class="btn btn-primary">
+                              {/* <button type="button" class="btn btn-primary">
                                 Save changes
-                              </button>
+                              </button> */}
                             </div>
                           </div>
                         </div>
@@ -285,16 +298,18 @@ export default function Table({ UpdatedUser, isUpdateLoading }) {
                        
                             <table>
                               <thead>
+                                <th>postId</th>
                                 <th>id</th>
-                                <th style={{width:"70%"}}>title</th>
+                                <th style={{width:"70%"}}>body</th>
                                 {/* <th>body</th> */}
                               </thead>            
                               <tbody>
                               {commentsdata?.map((elem, index) => {
                                 return (
                                     <tr>
+                                <td>{elem.postId}</td>
                                 <td>{elem.id}</td>
-                                <td style={{width:"70%"}}>{elem.title}</td>
+                                <td style={{width:"70%"}}>{elem.body}</td>
                                 {/* <td>{elem.body}</td> */}
                                 </tr>
                                 );
@@ -311,9 +326,9 @@ export default function Table({ UpdatedUser, isUpdateLoading }) {
                               >
                                 Close
                               </button>
-                              <button type="button" class="btn btn-primary">
+                              {/* <button type="button" class="btn btn-primary">
                                 Save changes
-                              </button>
+                              </button> */}
                             </div>
                           </div>
                         </div>
